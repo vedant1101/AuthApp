@@ -4,6 +4,7 @@ import { Input } from "../components/Input";
 import { Alert } from "../components/Alert";
 import { PasswordStrength } from "../components/PasswordStrength";
 import { usePasswordStrength } from "../hooks/usePasswordStrength";
+import { api } from "../api";
 
 export function Register() {
   const navigate     = useNavigate();
@@ -35,6 +36,7 @@ export function Register() {
     setLoading(true);
 
     try {
+        await api.register(email, password);
         setAlert({ type: "success", msg: "Account created! Please sign in." });
         setTimeout(() => navigate("/login"), 1500);
     } catch (err: any) {
