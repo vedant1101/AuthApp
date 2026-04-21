@@ -28,6 +28,6 @@ export const api = {
   login: (email: string, password: string) =>
     request("/login", { email, password }),
 
-  me: (token: string) =>
+  me: (token: string | null) =>
     request("/me", undefined, "GET", token),  
 };
