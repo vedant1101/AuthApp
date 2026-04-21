@@ -1,21 +1,42 @@
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { api } from "../api"; // adjust path if needed
 
 export function Dashboard() {
-  const { user, token, logout } = useAuth();
+  const { token, logout } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect if not logged in
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    if (!user) navigate("/login");
-  }, [user]);
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    async function loadUser() {
+      try {
+        const data = await api.me(token); // 🔥 backend source of truth
+        setUser(data);
+      } catch (err) {
+        logout();
+        navigate("/login");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadUser();
+  }, [token]);
 
   function handleLogout() {
     logout();
     navigate("/login");
   }
 
+  if (loading) return <p>Loading...</p>;
   if (!user) return null;
 
   return (
@@ -28,7 +49,7 @@ export function Dashboard() {
       <div className="dash-header">
         <div>
           <h1 className="heading">Welcome back</h1>
-          <p className="subheading">You're authenticated</p>
+          <p className="subheading">Verified from backend</p>
         </div>
         <div className="badge">
           <span className="badge-dot" />
@@ -44,11 +65,6 @@ export function Dashboard() {
       <div className="info-box">
         <p className="info-label">Email</p>
         <p className="info-value">{user.email}</p>
-      </div>
-
-      <div className="token-box">
-        <p className="info-label">JWT Token</p>
-        <p className="token-value">{token}</p>
       </div>
 
       <button className="btn-outline" onClick={handleLogout}>

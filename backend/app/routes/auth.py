@@ -5,6 +5,7 @@ from app.models.user import User
 from app.schemas.user import RegisterRequest, LoginRequest, AuthResponse, UserResponse, MessageResponse
 from app.utils.hashing import hash_password, verify_password
 from app.utils.token import create_token
+from app.utils.dependencies import get_current_user
 
 router = APIRouter()
 
@@ -58,6 +59,13 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
         message = "Login successful",
         user    = UserResponse(id=user.id, email=user.email),
         token   = token
+    )
+
+@router.get("/me", response_model=UserResponse)
+def get_me(current_user: User = Depends(get_current_user)):
+    return UserResponse(
+        id=current_user.id,
+        email=current_user.email
     )
 
 # ─── Health Check ─────────────────────────────────────────────────────
