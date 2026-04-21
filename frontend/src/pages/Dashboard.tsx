@@ -3,11 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../api"; // adjust path if needed
 
+
 export function Dashboard() {
   const { token, logout } = useAuth();
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
+  type User = {
+    id: number;
+    email: string;
+  };
+
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,7 +24,7 @@ export function Dashboard() {
 
     async function loadUser() {
       try {
-        const data = await api.me(token); // 🔥 backend source of truth
+        const data: User = await api.me(token);
         setUser(data);
       } catch (err) {
         logout();
