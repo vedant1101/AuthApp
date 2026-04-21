@@ -38,10 +38,8 @@ export function Register() {
     setLoading(true);
 
     try {
-      const data = await api.register(email, password);
-      login(data.user, data.token);
-      setAlert({ type: "success", msg: data.message });
-      setTimeout(() => navigate("/dashboard"), 600);
+        setAlert({ type: "success", msg: "Account created! Please sign in." });
+        setTimeout(() => navigate("/login"), 1500);
     } catch (err: any) {
       setAlert({ type: "error", msg: err.message });
     } finally {
