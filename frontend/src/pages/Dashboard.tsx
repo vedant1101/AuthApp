@@ -16,16 +16,27 @@ export function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = token || localStorage.getItem("token");
-
+    const storedAuth = localStorage.getItem("auth");
+  
+    let storedToken = token;
+  
+    if (!storedToken && storedAuth) {
+      try {
+        const parsed = JSON.parse(storedAuth);
+        storedToken = parsed.token;
+      } catch (e) {
+        console.error("Invalid auth in localStorage");
+      }
+    }
+  
     if (!storedToken) {
       navigate("/login");
       return;
     }
-
+  
     async function loadUser() {
       try {
-        const data: User = await api.me(storedToken);
+        const data: User = await api.me(storedToken!);
         setUser(data);
       } catch (err) {
         logout();
@@ -34,7 +45,7 @@ export function Dashboard() {
         setLoading(false);
       }
     }
-
+  
     loadUser();
   }, [token]);
 
