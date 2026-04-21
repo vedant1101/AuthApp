@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../api"; // adjust path if needed
 
-
 export function Dashboard() {
   const { token, logout } = useAuth();
   const navigate = useNavigate();
@@ -17,14 +16,16 @@ export function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!token) {
+    const storedToken = token || localStorage.getItem("token");
+
+    if (!storedToken) {
       navigate("/login");
       return;
     }
 
     async function loadUser() {
       try {
-        const data: User = await api.me(token);
+        const data: User = await api.me(storedToken);
         setUser(data);
       } catch (err) {
         logout();
