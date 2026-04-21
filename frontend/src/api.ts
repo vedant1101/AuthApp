@@ -4,7 +4,7 @@ async function request(
   endpoint: string,
   body?: object,
   method: "POST" | "GET" = "POST",
-  token?: string
+  token?: string | null
 ) {
   const res = await fetch(`${BASE}/api/auth${endpoint}`, {
     method,
