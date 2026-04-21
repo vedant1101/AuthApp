@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { Input } from "../components/Input";
 import { Alert } from "../components/Alert";
 import { PasswordStrength } from "../components/PasswordStrength";
 import { usePasswordStrength } from "../hooks/usePasswordStrength";
 
 export function Register() {
-  const { login }    = useAuth();
   const navigate     = useNavigate();
 
   const [email,     setEmail]     = useState("");
