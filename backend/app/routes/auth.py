@@ -9,7 +9,7 @@ from app.utils.token import create_token
 router = APIRouter()
 
 # ─── Register ────────────────────────────────────────────────────────
-@router.post("/register", response_model=AuthResponse, status_code=201)
+@router.post("/register", response_model=MessageResponse, status_code=201)
 def register(body: RegisterRequest, db: Session = Depends(get_db)):
 
     # Check if email already exists
