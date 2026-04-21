@@ -30,10 +30,7 @@ def register(body: RegisterRequest, db: Session = Depends(get_db)):
     db.refresh(user)
 
 
-    return AuthResponse(
-        message = "Account created successfully",
-        user    = UserResponse(id=user.id, email=user.email),
-    )
+    return MessageResponse(message="Account created successfully")
 
 # ─── Login ───────────────────────────────────────────────────────────
 @router.post("/login", response_model=AuthResponse)
