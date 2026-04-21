@@ -29,13 +29,10 @@ def register(body: RegisterRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
-    # Generate token
-    token = create_token({"sub": str(user.id), "email": user.email})
 
     return AuthResponse(
         message = "Account created successfully",
         user    = UserResponse(id=user.id, email=user.email),
-        token   = token
     )
 
 # ─── Login ───────────────────────────────────────────────────────────
